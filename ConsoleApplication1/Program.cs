@@ -12,18 +12,13 @@ namespace ConsoleApplication1
         {
             CassandraDbMgr dbcMgr = new CassandraDbMgr("127.0.0.1");
 
-            dbcMgr.ExecuteNonQuery("create table if not exists test2 (id int, description varchar, primary key (id));");
+            dbcMgr.Execute("create table if not exists demo.test2 (id int, group int, description varchar, primary key (id));");
+            
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("insert into test2(id, description) values (:id, :description);{0}", Environment.NewLine);
 
-            var test = new { a = "aValue", b = "bValue" };
+            sb.AppendFormat("insert into test2(id, group, description) values (:id, :group, :description);{0}", Environment.NewLine);
 
-            IDictionary<string, object> p = new Dictionary<string, object>();
-
-            p.Add("id", 12);
-            p.Add("description", "This is a test");
-
-            dbcMgr.ExecuteNonQuery(sb.ToString(), p);
+            dbcMgr.Execute(sb.ToString());
         }
     }
 }

@@ -17,30 +17,18 @@ public    CassandraDbMgr(string p)
         this._session = cluster.Connect("demo");
         this.p = p;
     }
-        public void ExecuteNonQuery(string cql, dynamic parameters = null)
-        {
-            ExecuteRowSet(cql, parameters);
-        }
 
-       public RowSet ExecuteRowSet(string cql, dynamic parameters = null)
+        public RowSet Execute(string cql)
         {
-            if (parameters != null)
-            {
-                PreparedStatement ps = _session.Prepare(cql);
-                object[] myArgs = new object[2];
-                Console.Out.WriteLine(p.Length);
-                int i = 0;
-                foreach (var item in (IDictionary<string,object>)parameters)
-                {
-                    myArgs[i] = item.Value;
-                    Console.Out.WriteLine(item.Value);
-                    i++;
-                }
-                Console.Out.WriteLine(myArgs.ToString());
-                dynamic x = ps.Bind(myArgs);
-                return _session.Execute(x);
-            }
-            else return _session.Execute(cql);
+            PreparedStatement ps = _session.Prepare(cql);
+
+            int id = 110;
+            int group = 2;
+            string description = "Test record 1 group 1";
+
+            dynamic x = ps.Bind(new { id = id , group = group, description = description});
+                
+            return _session.Execute(x);
         }
 	}
 }
